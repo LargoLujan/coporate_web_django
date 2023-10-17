@@ -1,0 +1,83 @@
+{% load static %}
+{% load my_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tu sitio</title>
+    <style>
+        /* styles.css content */
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            background-color: #333;
+            overflow: hidden;
+            color: white;
+        }
+
+        .navbar__menu {
+            display: flex;
+            justify-content: space-around;
+            flex-grow: 1;
+        }
+
+        .navbar a {
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .container {
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+
+        <div class="navbar__menu">
+            <a href="{% url 'home' %}">Inicio</a>
+            {% if user.is_authenticated %}
+                {% if user|has_group:"employees" %}
+                    <a href="{% url 'calendar' %}">Calendario</a>
+                    <a href="{% url 'view_requests' %}">Solicitudes</a>
+                    <a href="{% url 'profile' %}">Mi Perfil</a>
+                {% elif user|has_group:"admin" or user|has_group:"head" %}
+                    <a href="{% url 'calendar' %}">Calendario</a>
+                    <a href="{% url 'view_requests' %}">Solicitudes</a>
+                    <a href="{% url 'profile' %}">Mi Perfil</a>
+                    <a href="{% url 'manage_news' %}">Gestion noticias</a>
+                    <a href="{% url 'manage_requests' %}">Gestion solicitudes</a>
+                    <a href="{% url 'manage_profiles' %}">Gestion perfiles</a>
+                {% endif %}
+                <a href="{% url 'logout' %}">Logout</a> <!-- Aquí está el enlace de logout -->
+            {% else %}
+                <a href="{% url 'login' %}">Login In</a>
+            {% endif %}
+        </div>
+    </nav>
+
+
+    <div class="container">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <script>
+        // Aquí puedes agregar tu código JavaScript
+    </script>
+</body>
+</html>
