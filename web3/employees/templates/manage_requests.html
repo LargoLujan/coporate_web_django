@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Submit a Request</h1>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<!-- Aquí comienza la tabla para mostrar las solicitudes -->
+
+<h2>Listado de solicitudes</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Fecha de registro</th>
+            <th>Tipo de solicitud</th>
+            <th>Fecha de inicio</th>
+            <th>Fecha de finalización</th>
+            <th>Descripción</th>
+            <!-- Otros campos que quieras mostrar -->
+        </tr>
+    </thead>
+    <tbody>
+        {% for request in requests_list %}
+        <tr>
+            <td>{{ request.created_at }}</td>
+            <td>{{ request.request_type }}</td>
+            <td>{{ request.start_date }}</td>
+            <td>{{ request.end_date }}</td>
+            <td>{{ request.description }}</td>
+            <!-- Otros campos que quieras mostrar -->
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
+

@@ -7,13 +7,9 @@
         <img src="{{ profile.image.url }}" alt="Foto de perfil" width="200"> <!-- Mostrar la imagen del perfil -->
     </div>
 
-    <p><strong>Nombre:</strong> {{ profile.user.username }}</p>
+    <p><strong>Nombre:</strong> {{ profile.user.first_name }}</p>
+    <p><strong>Apellidos:</strong> {{ profile.user.last_name }}</p>
     <p><strong>Email:</strong> {{ profile.user.email }}</p>
-    <p><strong>Fecha de nacimiento:</strong> {{ profile.birthdate }}</p>
     <p><strong>Posición:</strong> {{ profile.position }}</p>
-
-    {% if user_is_admin %}
-        <a href="{% url 'edit_profile' profile.id %}" class="btn btn-primary">Editar perfil</a>
-    {% endif %}
 
 {% endblock %}

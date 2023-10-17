@@ -39,6 +39,7 @@ class Request(models.Model):
     description = models.TextField()
     document = models.FileField(upload_to='documents/', null=True, blank=True)
     is_approved = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 
 @receiver(post_save, sender=User)

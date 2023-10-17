@@ -54,13 +54,16 @@ def calendar(request, user_id=None):
 @user_passes_test(user_is_head_or_admin)
 def manage_requests(request):
     if request.method == "POST":
-        form = RequestForm(request.POST)
+        form = RequestForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            request_model = form.save(commit=False)
+            request_model.user = request.user
+            request_model.save()
             return redirect('view_requests')
     else:
         form = RequestForm()
-    return render(request, 'employees/manage_requests.html', {'form': form})
+    return render(request, 'manage_requests.html', {'form': form})
+
 
 
 @login_required
@@ -73,13 +76,13 @@ def manage_news(request):
             return redirect('home')
     else:
         form = NewsForm()
-    return render(request, 'employees/manage_news.html', {'form': form})
+    return render(request, 'manage_news.html', {'form': form})
 
 
 @login_required
 def view_requests(request):
     requests = Request.objects.all()
-    return render(request, 'employees/view_requests.html', {'requests': requests})
+    return render(request, 'view_requests.html', {'request': requests})
 
 
 @login_required

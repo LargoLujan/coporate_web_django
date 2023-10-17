@@ -18,12 +18,9 @@ class NewsForm(forms.ModelForm):
 class RequestForm(forms.ModelForm):
     class Meta:
         model = Request
-        fields = ['user', 'request_type', 'start_date', 'end_date', 'description',
-                  'document']  # Actualicé los campos también
+        fields = ['request_type', 'start_date', 'end_date', 'description', 'document']
         widgets = {
-            # 'department': forms.Select(attrs={'class': 'form-control'}),  # No veo un campo de department en tu modelo
             'request_type': forms.Select(choices=Request.REQUEST_CHOICES, attrs={'class': 'form-control'}),
-            # Aquí está la corrección
             'description': forms.Textarea(attrs={'class': 'form-control'}),
             'document': forms.FileInput(attrs={'class': 'form-control-file'}),
         }
