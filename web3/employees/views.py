@@ -1,10 +1,11 @@
 from django.contrib.auth.models import User
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import logout
 from .models import News, Event, Request, Profile
 from .forms import NewsForm, RequestForm, ProfileUpdateForm, EditRequestForm
 from django.http import HttpResponseForbidden
+from django.shortcuts import render, redirect
 
 
 def user_is_admin(user):
@@ -47,7 +48,7 @@ def calendar(request, user_id=None):
         events = Event.objects.filter(user_id=user_id)
     else:
         events = Event.objects.filter(user=request.user)
-    return render(request, 'employees/calendar.html', {'events': events})
+    return render(request, 'calendar.html', {'events': events})
 
 
 @login_required
@@ -64,9 +65,6 @@ def manage_requests(request):
 
     requests = Request.objects.filter(user=request.user)  # Aquí recuperamos todas las solicitudes
     return render(request, 'manage_requests.html', {'form': form, 'requests': requests})
-
-
-
 
 
 @login_required
@@ -86,6 +84,7 @@ def manage_news(request):
 def view_requests(request):
     all_requests = Request.objects.all().order_by('-created_at')
     return render(request, 'view_requests.html', {'requests': all_requests})
+
 
 @login_required
 @user_passes_test(user_is_head_or_admin)
@@ -138,7 +137,6 @@ def edit_profile(request, profile_id):
 def manage_profiles(request):
     users = User.objects.all()
     return render(request, 'edit_profile.html', {'users': users, 'editing': False})
-
 
 
 @login_required

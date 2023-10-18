@@ -1,7 +1,6 @@
 from django import forms
-from .models import News, Request, Event, Profile
+from .models import News, Request, Event, Profile, UserWorkDay
 from django.contrib.auth.models import User, Group
-from django.contrib.auth.forms import PasswordChangeForm
 
 
 class NewsForm(forms.ModelForm):
@@ -82,3 +81,16 @@ class EditRequestForm(forms.ModelForm):
     class Meta:
         model = Request
         fields = ['description', 'status']  # Y cualquier otro campo que quieras editar
+
+
+class UserWorkDayForm(forms.ModelForm):
+    is_working = forms.BooleanField(
+        required=False,
+        widget=forms.CheckboxInput(attrs={
+            'class': 'work-day-checkbox'
+        })
+    )
+
+    class Meta:
+        model = UserWorkDay
+        fields = ['is_working']

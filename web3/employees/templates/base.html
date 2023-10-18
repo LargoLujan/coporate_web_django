@@ -42,6 +42,35 @@
         .container {
             padding: 20px;
         }
+
+        .scrollable-table {
+            max-width: 100%; /* o cualquier otro ancho que prefieras */
+            overflow-x: auto;
+            border: 1px solid #ddd; /* Opcional, solo para ver los bordes del contenedor */
+        }
+
+        .table {
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .table th, table td {
+            border: 1px solid #ccc; /* Este es el color de la línea de cuadrícula. Puedes cambiarlo según lo necesites. */
+            padding: 5px;
+        }
+
+        .sticky {
+            position: sticky;
+            left: 0;
+            z-index: 1;
+            background-color: white; /* Esto es para asegurar que el fondo de las celdas pegajosas sea opaco. */
+        }
+
+        /* Estilos para el filtro de selección de usuarios */
+        #user_filter {
+            margin: 10px 0;
+        }
+
     </style>
 </head>
 <body>
@@ -52,11 +81,9 @@
             <a href="{% url 'home' %}">Inicio</a>
             {% if user.is_authenticated %}
                 {% if user|has_group:"employees" %}
-                    <a href="{% url 'calendar' %}">Calendario</a>
                     <a href="{% url 'manage_requests' %}">Solicitudes</a>
                     <a href="{% url 'profile' %}">Mi Perfil</a>
                 {% elif user|has_group:"admin" or user|has_group:"head" %}
-                    <a href="{% url 'calendar' %}">Calendario</a>
                     <a href="{% url 'manage_requests' %}">Solicitudes</a>
                     <a href="{% url 'profile' %}">Mi Perfil</a>
                     <a href="{% url 'manage_news' %}">Gestion noticias</a>
