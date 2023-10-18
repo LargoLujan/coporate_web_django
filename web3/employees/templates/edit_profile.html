@@ -6,6 +6,7 @@
 <!-- Incluir CSS de DataTables -->
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
 
+{% if not editing %}
 <table id="usersTable">
     <thead>
         <tr>
@@ -31,14 +32,6 @@
     </tbody>
 </table>
 
-<h2>Edit Profile</h2>
-
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Update Profile</button>
-</form>
-
 <!-- Incluir JS necesario para DataTables -->
 <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
@@ -47,5 +40,14 @@ $(document).ready( function () {
     $('#usersTable').DataTable();
 } );
 </script>
+{% else %}
+<h2>Edit Profile</h2>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Update Profile</button>
+</form>
+{% endif %}
 
 {% endblock %}

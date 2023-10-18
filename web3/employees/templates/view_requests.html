@@ -3,11 +3,46 @@
 {% block content %}
 <h1>Submit a Request</h1>
 
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+<!-- Incluir CSS de DataTables -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+
+<h2>List of Requests</h2>
+{% if requests %}
+    <!-- Añadir un ID a la tabla -->
+    <table class="table" id="requestsTable">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>User</th>
+                <th>Subject</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for request_item in requests %}
+                <tr>
+                    <td>{{ request_item.created_at }}</td>
+                    <td>{{ request_item.user.username }}</td>
+                    <td>{{ request_item.subject }}</td>
+                    <td>{{ request_item.status }}</td>
+                    <td><a href="{% url 'edit_request' request_item.id %}">Edit</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No requests have been submitted yet.</p>
+{% endif %}
+
+<!-- Incluir JS necesario para DataTables -->
+<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+<script>
+$(document).ready( function () {
+    // Inicializar DataTables para la tabla de solicitudes
+    $('#requestsTable').DataTable();
+} );
+</script>
 
 {% endblock %}
-

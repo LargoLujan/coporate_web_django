@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Edit Request</h1>
+
+<!-- Mostrando la información adicional -->
+<p>
+    Nombre completo: {{ form.instance.user.first_name }} {{ form.instance.user.last_name }}<br>
+    Fecha de creación: {{ form.instance.created_at }}<br>
+    Asunto: {{ form.instance.subject }}
+</p>
+
+<!-- Formulario para editar la solicitud -->
+<form method="post">
+    {% csrf_token %}
+    <!-- Mostrar solo los campos de descripción y estado para edición -->
+    <label>{{ form.description.label }}</label>
+    {{ form.description }}<br>
+    <label>{{ form.status.label }}</label>
+    {{ form.status }}<br>
+    <button type="submit" class="btn btn-primary">Update</button>
+</form>
+
+{% endblock %}
+

@@ -9,33 +9,35 @@
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 
-<!-- Aquí comienza la tabla para mostrar las solicitudes -->
-
-<h2>Listado de solicitudes</h2>
+<!-- Lista de solicitudes -->
+<h2>List of Requests</h2>
 <table class="table">
     <thead>
         <tr>
-            <th>Fecha de registro</th>
-            <th>Tipo de solicitud</th>
-            <th>Fecha de inicio</th>
-            <th>Fecha de finalización</th>
-            <th>Descripción</th>
-            <!-- Otros campos que quieras mostrar -->
+            <th>Date</th>
+            <th>User</th>
+            <th>Subject</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Action</th> <!-- Columna adicional para el botón "Ver" -->
         </tr>
     </thead>
     <tbody>
-        {% for request in requests_list %}
+        {% for request in requests %}
         <tr>
             <td>{{ request.created_at }}</td>
-            <td>{{ request.request_type }}</td>
-            <td>{{ request.start_date }}</td>
-            <td>{{ request.end_date }}</td>
+            <td>{{ request.user.username }}</td>
+            <td>{{ request.subject }}</td>
             <td>{{ request.description }}</td>
-            <!-- Otros campos que quieras mostrar -->
+            <td>{{ request.status }}</td>
+            <td><a href="{% url 'view_single_request' request.id %}" class="btn btn-primary">Ver</a></td> <!-- Botón "Ver" -->
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6">No requests found.</td> <!-- Ajustado el "colspan" a 6 debido a la nueva columna -->
         </tr>
         {% endfor %}
     </tbody>
 </table>
 
 {% endblock %}
-

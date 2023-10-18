@@ -31,6 +31,15 @@ class Request(models.Model):
         ('Leave', 'Leave'),
         ('Other', 'Other'),
     )
+    PENDING = 'Pending'
+    APPROVED = 'Approved'
+    REJECTED = 'Rejected'
+
+    STATUS_CHOICES = (
+        (PENDING, 'Pending'),
+        (APPROVED, 'Approved'),
+        (REJECTED, 'Rejected'),
+    )
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     request_type = models.CharField(max_length=50, choices=REQUEST_CHOICES)
@@ -40,6 +49,8 @@ class Request(models.Model):
     document = models.FileField(upload_to='documents/', null=True, blank=True)
     is_approved = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    subject = models.CharField(max_length=200, default='Asunto no especificado')
+    status = models.CharField(max_length=50, choices=STATUS_CHOICES, default="Pending")
 
 
 @receiver(post_save, sender=User)

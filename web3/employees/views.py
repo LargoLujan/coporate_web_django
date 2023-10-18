@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import authenticate, login, logout
 from .models import News, Event, Request, Profile
-from .forms import NewsForm, RequestForm, ProfileUpdateForm, EventForm
+from .forms import NewsForm, RequestForm, ProfileUpdateForm, EditRequestForm
 from django.http import HttpResponseForbidden
 
 
@@ -51,7 +51,6 @@ def calendar(request, user_id=None):
 
 
 @login_required
-@user_passes_test(user_is_head_or_admin)
 def manage_requests(request):
     if request.method == "POST":
         form = RequestForm(request.POST, request.FILES)
@@ -62,7 +61,11 @@ def manage_requests(request):
             return redirect('view_requests')
     else:
         form = RequestForm()
-    return render(request, 'manage_requests.html', {'form': form})
+
+    requests = Request.objects.filter(user=request.user)  # Aquí recuperamos todas las solicitudes
+    return render(request, 'manage_requests.html', {'form': form, 'requests': requests})
+
+
 
 
 
@@ -81,9 +84,8 @@ def manage_news(request):
 
 @login_required
 def view_requests(request):
-    requests = Request.objects.all()
-    return render(request, 'view_requests.html', {'request': requests})
-
+    all_requests = Request.objects.all().order_by('-created_at')
+    return render(request, 'view_requests.html', {'requests': all_requests})
 
 @login_required
 @user_passes_test(user_is_head_or_admin)
@@ -128,13 +130,41 @@ def edit_profile(request, profile_id):
             'user_last_name': profile.user.last_name
         })
 
-    return render(request, 'edit_profile.html', {'form': form})
-
-
+    return render(request, 'edit_profile.html', {'form': form, 'editing': True})
 
 
 @login_required
 @user_passes_test(user_is_head_or_admin)
 def manage_profiles(request):
     users = User.objects.all()
-    return render(request, 'edit_profile.html', {'users': users})
+    return render(request, 'edit_profile.html', {'users': users, 'editing': False})
+
+
+
+@login_required
+def view_single_request(request, request_id):
+    single_request = get_object_or_404(Request, id=request_id)
+    if single_request.user != request.user:
+        return HttpResponseForbidden("No tienes permiso para ver esta solicitud.")
+    context = {'single_request': single_request}
+    return render(request, 'single_request.html', context)
+
+
+@login_required
+@user_passes_test(user_is_head_or_admin)
+def edit_request(request, request_id):
+    request_instance = get_object_or_404(Request, id=request_id)
+
+    if request.method == 'POST':
+        form = EditRequestForm(request.POST, instance=request_instance)
+        if form.is_valid():
+            form.save()
+            # Puedes redirigir al usuario a la página de visualización de la solicitud o a cualquier otra página tras guardar los cambios.
+            return redirect('view_requests')
+    else:
+        form = EditRequestForm(instance=request_instance)
+
+    context = {
+        'form': form,
+    }
+    return render(request, 'edit_request.html', {'form': form})

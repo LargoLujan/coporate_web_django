@@ -74,3 +74,11 @@ class UserUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['birthdate', 'position', 'image']'''
+
+
+class EditRequestForm(forms.ModelForm):
+    status = forms.ChoiceField(choices=Request.STATUS_CHOICES)  # Asumiendo que STATUS_CHOICES es una tupla con las opciones de estado en tu modelo Request
+
+    class Meta:
+        model = Request
+        fields = ['description', 'status']  # Y cualquier otro campo que quieras editar

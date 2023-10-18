@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>{{ single_request.subject }}</h1>
+<p>
+    Nombre: {{ single_request.user.first_name }} {{ single_request.user.last_name }} <br>
+    Usuario: {{ single_request.user.username }} <br>
+    Estado: {{ single_request.status }} <br>
+    Fecha de Creación: {{ single_request.created_at }} <br>
+    Descripción:<br>
+    <br>
+    {{ single_request.description }} <br>
+</p>
+{% endblock %}
+
