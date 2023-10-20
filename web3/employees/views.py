@@ -6,6 +6,8 @@ from .models import News, Event, Request, Profile
 from .forms import NewsForm, RequestForm, ProfileUpdateForm, EditRequestForm
 from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
 
 def user_is_admin(user):
@@ -25,8 +27,8 @@ def user_is_head_or_admin(user):
 
 
 def home(request):
-    news = News.objects.all()
-    return render(request, 'home.html', {'home': news})
+    news = News.objects.all().order_by('-created_at')
+    return render(request, 'home.html', {'news': news})
 
 
 @login_required
@@ -166,3 +168,48 @@ def edit_request(request, request_id):
         'form': form,
     }
     return render(request, 'edit_request.html', {'form': form})
+
+@login_required
+@user_passes_test(user_is_admin)
+def manage_news(request):
+    news = News.objects.all()
+    return render(request, 'manage_news.html', {'news': news})
+
+
+def add_news(request):
+    if request.method == "POST":
+        news_form = NewsForm(request.POST, request.FILES)
+        if news_form.is_valid():
+            # Procesar y guardar el formulario si es válido
+            news_form.save()
+            return redirect('manage_news')
+    else:
+        news_form = NewsForm()
+
+    return render(request, 'add_news.html', {'news_form': news_form})
+
+
+@login_required
+def edit_news(request, news_id):
+    news = News.objects.get(pk=news_id)
+
+    if request.method == "POST":
+        news_form = NewsForm(request.POST, request.FILES, instance=news)
+        if news_form.is_valid():
+            news_form.save()
+            return redirect('manage_news')
+    else:
+        news_form = NewsForm(instance=news)
+
+    return render(request, 'edit_news.html', {'news_form': news_form, 'news': news})
+
+
+@login_required
+def delete_news(request, news_id):
+    news = News.objects.get(pk=news_id)
+
+    if request.method == "POST":
+        news.delete()
+        return redirect('manage_news')
+
+    return render(request, 'confirm_delete_news.html', {'news': news})

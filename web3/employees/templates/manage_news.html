@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Manage News</h1>
+
+<!-- Agregar noticia -->
+<a href="{% url 'add_news' %}">Agregar Noticia</a>
+
+<!-- Filtrar noticias -->
+<form method="get">
+  <label for="search">Buscar Noticia:</label>
+  <input type="text" id="search" name="search" value="{{ request.GET.search }}">
+  <button type="submit">Buscar</button>
+</form>
+
+<!-- Lista de noticias -->
+<table>
+  <thead>
+    <tr>
+      <th>Título</th>
+      <th>Texto</th>
+      <th>Imagen</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in news %}
+      <tr>
+        <td>{{ item.title }}</td>
+        <td>{{ item.content }}</td>
+        <td>
+          {% if item.image %}
+            <img src="{{ item.image.url }}" alt="{{ item.title }}" height="100">
+          {% else %}
+            No hay imagen
+          {% endif %}
+        </td>
+        <td>
+          <a href="{% url 'edit_news' item.id %}">Editar</a> |
+          <a href="{% url 'delete_news' item.id %}">Eliminar</a>
+        </td>
+      </tr>
+    {% empty %}
+      <tr>
+        <td colspan="4">No hay noticias disponibles.</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
