@@ -22,6 +22,7 @@ urlpatterns = [
     path('add_news/', views.add_news, name='add_news'),
     path('edit_news/<int:news_id>/', views.edit_news, name='edit_news'),
     path('delete_news/<int:news_id>/', views.delete_news, name='delete_news'),
+    path('delete_request/<int:request_id>/', views.delete_request, name='delete_request'),
 
 ]
 

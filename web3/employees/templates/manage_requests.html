@@ -27,7 +27,7 @@
         <tr>
             <td>{{ request.created_at }}</td>
             <td>{{ request.user.username }}</td>
-            <td>{{ request.subject }}</td>
+            <td>{{ request.request_type }}</td>
             <td>{{ request.description }}</td>
             <td>{{ request.status }}</td>
             <td><a href="{% url 'view_single_request' request.id %}" class="btn btn-primary">Ver</a></td> <!-- Botón "Ver" -->

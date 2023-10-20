@@ -18,8 +18,10 @@
     {{ form.description }}<br>
     <label>{{ form.status.label }}</label>
     {{ form.status }}<br>
+    {% if form.instance.document %}
+        <a href="{{ form.instance.document.url }}" target="_blank">Ver Documento Adjunto</a><br>
+    {% endif %}
     <button type="submit" class="btn btn-primary">Update</button>
 </form>
 
 {% endblock %}
-

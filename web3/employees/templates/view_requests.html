@@ -24,9 +24,11 @@
                 <tr>
                     <td>{{ request_item.created_at }}</td>
                     <td>{{ request_item.user.username }}</td>
-                    <td>{{ request_item.subject }}</td>
+                    <td>{{ request_item.request_type }}</td>
                     <td>{{ request_item.status }}</td>
-                    <td><a href="{% url 'edit_request' request_item.id %}">Edit</a></td>
+                    <td><a href="{% url 'edit_request' request_item.id %}">Edit</a>
+                        <a href="{% url 'delete_request' request_item.id %}">Eliminar</a>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>

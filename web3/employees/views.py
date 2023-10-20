@@ -6,8 +6,7 @@ from .models import News, Event, Request, Profile
 from .forms import NewsForm, RequestForm, ProfileUpdateForm, EditRequestForm
 from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect
-from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.contrib import messages
 
 
 def user_is_admin(user):
@@ -61,7 +60,7 @@ def manage_requests(request):
             request_model = form.save(commit=False)
             request_model.user = request.user
             request_model.save()
-            return redirect('view_requests')
+            return redirect('manage_requests')
     else:
         form = RequestForm()
 
@@ -160,7 +159,7 @@ def edit_request(request, request_id):
         if form.is_valid():
             form.save()
             # Puedes redirigir al usuario a la página de visualización de la solicitud o a cualquier otra página tras guardar los cambios.
-            return redirect('view_requests')
+            return redirect('home')
     else:
         form = EditRequestForm(instance=request_instance)
 
@@ -213,3 +212,19 @@ def delete_news(request, news_id):
         return redirect('manage_news')
 
     return render(request, 'confirm_delete_news.html', {'news': news})
+
+@login_required
+def delete_request(request, request_id):
+    request_to_delete = get_object_or_404(Request, id=request_id)
+
+    # Verifica si el usuario es el creador de la solicitud o es un administrador
+    if request.user == request_to_delete.user or request.user.is_superuser:
+        if request.method == 'POST':
+            request_to_delete.delete()
+            messages.success(request, "La solicitud ha sido eliminada exitosamente.")
+            return redirect('view_requests')
+        else:
+            return render(request, 'confirm_delete_request.html', {'request_to_delete': request_to_delete})
+    else:
+        messages.error(request, "No tienes permiso para eliminar esta solicitud.")
+        return redirect('view_requests')
