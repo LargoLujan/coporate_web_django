@@ -1,61 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Lista de Solicitudes</h1>
 
-<!-- Incluir CSS de DataTables -->
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
-{% if requests %}
-    <!-- Añadir un ID a la tabla -->
-    <table class="table" id="requestsTable">
-        <thead>
-            <tr>
-                <th>Fecha solicitud</th>
-                <th>Nombre</th>
-                <th>Apellidos</th>
-                <th>Usuario</th>
-                <th>Asunto</th>
-                <th>Estado</th>
-                <th>Acción</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for request_item in requests %}
-                <tr>
-                    <td>{{ request_item.created_at }}</td>
-                    <td>{{ user.first_name }}</td>
-                    <td>{{ user.last_name }}</td>
-                    <td>{{ request_item.user.username }}</td>
-                    <td>{{ request_item.request_type }}</td>
-                    <td>{{ request_item.status }}</td>
-                    <td>
-                        <a href="{% url 'edit_request' request_item.id %}" class="btn-edit">Editar</a>
-                        <a href="{% url 'delete_request' request_item.id %}" class="btn-delete">Eliminar</a>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-{% else %}
-    <p>Todavía no se ha presentado ninguna solicitud.</p>
-{% endif %}
-
-<!-- Incluir JS necesario para DataTables -->
-<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
-<script>
-$(document).ready( function () {
-    // Inicializar DataTables y habilitar la funcionalidad de filtrado y ordenamiento de columnas
-    $('#requestsTable').DataTable({
-        "language": {
-            "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json" // Traducción al español
-        }
-    });
-} );
-</script>
-
+<!-- Estilos CSS -->
 <style>
-    /* Estilos para los botones Edit y Eliminar */
+    /* Estilos para los botones Editar y Eliminar */
     .btn-edit,
     .btn-delete {
         padding: 5px 10px;
@@ -76,15 +25,15 @@ $(document).ready( function () {
         background-color: #E74C3C; /* Rojo rubí */
     }
 
-    /* Efecto de brillo al pasar el cursor sobre los botones */
+    /* Efectos al pasar el cursor sobre los botones */
     .btn-edit:hover {
-        background-color: #16A085; /* Verde esmeralda más oscuro al pasar el cursor */
-        animation: shine-green 2s infinite; /* Agrega una animación de brillo infinito en verde */
+        background-color: #16A085; /* Verde esmeralda oscurecido */
+        animation: shine-green 2s infinite; /* Animación de brillo en verde */
     }
 
     .btn-delete:hover {
-        background-color: #C0392B; /* Rojo más intenso al pasar el cursor */
-        animation: shine-red 2s infinite; /* Agrega una animación de brillo infinito en rojo */
+        background-color: #C0392B; /* Rojo intensificado */
+        animation: shine-red 2s infinite; /* Animación de brillo en rojo */
     }
 
     /* Animación de brillo en verde */
@@ -119,5 +68,55 @@ $(document).ready( function () {
         }
     }
 </style>
+
+<h1>Lista de Solicitudes</h1>
+
+<!-- Incluir CSS de DataTables en la parte superior -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+
+{% if requests %}
+    <!-- Tabla para mostrar las solicitudes -->
+    <table class="table" id="requestsTable">
+        <thead>
+            <tr>
+                <th>Fecha solicitud</th>
+                <th>Usuario</th>
+                <th>Asunto</th>
+                <th>Estado</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for request_item in requests %}
+                <tr>
+                    <td>{{ request_item.created_at }}</td>
+                    <td>{{ request_item.user.username }}</td>
+                    <td>{{ request_item.request_type }}</td>
+                    <td>{{ request_item.status }}</td>
+                    <td>
+                        <a href="{% url 'edit_request' request_item.id %}" class="btn-edit">Editar</a>
+                        <a href="{% url 'delete_request' request_item.id %}" class="btn-delete">Eliminar</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>Todavía no se ha presentado ninguna solicitud.</p>
+{% endif %}
+
+<!-- Scripts JS para DataTables -->
+<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+<script>
+$(document).ready( function () {
+    // Inicializar DataTables
+    $('#requestsTable').DataTable({
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json" // Traducción al español
+        }
+    });
+} );
+</script>
 
 {% endblock %}

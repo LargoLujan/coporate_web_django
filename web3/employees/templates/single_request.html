@@ -1,8 +1,23 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+<!-- Título principal -->
+<h1>{{ single_request.subject }}</h1>
+
+<!-- Información detallada de la solicitud -->
+<p>
+    Nombre: {{ single_request.user.first_name }} {{ single_request.user.last_name }} <br>
+    Usuario: {{ single_request.user.username }} <br>
+    Estado: {{ single_request.status }} <br>
+    Fecha de Creación: {{ single_request.created_at }} <br>
+    Descripción:<br>
+    {{ single_request.description }} <br>
+</p>
+
+<!-- Estilos personalizados para la página -->
 <style>
-    /* Estilos personalizados para la página de inicio */
+    /* Estilo para el artículo o noticia */
     .news-article {
         background-color: #f5f5f5; /* Fondo gris claro */
         border: 1px solid #ddd; /* Borde gris */
@@ -12,17 +27,20 @@
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
     }
 
+    /* Estilo para el encabezado del artículo */
     .news-article h2 {
         color: #333; /* Texto negro */
         font-size: 24px;
         margin-bottom: 10px;
     }
 
+    /* Estilo para el párrafo del artículo */
     .news-article p {
         color: #666; /* Texto gris */
         font-size: 16px;
     }
 
+    /* Estilo para la imagen del artículo */
     .news-article img {
         max-width: 100%;
         height: auto;
@@ -31,15 +49,5 @@
         border-radius: 5px; /* Bordes redondeados para las imágenes */
     }
 </style>
-<h1>{{ single_request.subject }}</h1>
-<p>
-    Nombre: {{ single_request.user.first_name }} {{ single_request.user.last_name }} <br>
-    Usuario: {{ single_request.user.username }} <br>
-    Estado: {{ single_request.status }} <br>
-    Fecha de Creación: {{ single_request.created_at }} <br>
-    Descripción:<br>
-    <br>
-    {{ single_request.description }} <br>
-</p>
-{% endblock %}
 
+{% endblock %}

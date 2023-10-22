@@ -1,8 +1,16 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+<!-- Mensaje principal de error -->
+<h1>No tienes permisos para acceder a esta página.</h1>
+
+<!-- Mensaje secundario de contacto -->
+<p>Por favor, contacta al administrador para obtener los permisos necesarios.</p>
+
+<!-- Estilos personalizados para la página -->
 <style>
-    /* Estilos personalizados para la página de inicio */
+    /* Estilo general para artículos o noticias (aunque en este contexto no se usa directamente, se deja por si se necesita en el futuro) */
     .news-article {
         background-color: #f5f5f5; /* Fondo gris claro */
         border: 1px solid #ddd; /* Borde gris */
@@ -12,17 +20,20 @@
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
     }
 
+    /* Estilo para el encabezado de artículos o noticias */
     .news-article h2 {
         color: #333; /* Texto negro */
         font-size: 24px;
         margin-bottom: 10px;
     }
 
+    /* Estilo para el párrafo de artículos o noticias */
     .news-article p {
         color: #666; /* Texto gris */
         font-size: 16px;
     }
 
+    /* Estilo para la imagen de artículos o noticias */
     .news-article img {
         max-width: 100%;
         height: auto;
@@ -31,13 +42,5 @@
         border-radius: 5px; /* Bordes redondeados para las imágenes */
     }
 </style>
-<html>
-<head>
-    <title>Sin permisos</title>
-</head>
-<body>
-    <h1>No tienes permisos para acceder a esta página.</h1>
-    <p>Por favor, contacta al administrador para obtener los permisos necesarios.</p>
-</body>
-</html>
+
 {% endblock %}

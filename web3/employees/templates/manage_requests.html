@@ -31,16 +31,10 @@
         border-radius: 5px; /* Bordes redondeados para las imágenes */
     }
 </style>
-<h1>Enviar una Solicitud</h1>
 
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Solicitar</button>
-</form>
 
 <!-- Lista de solicitudes -->
-<h2>Lista de Solicitudes</h2>
+<h1>Lista de Solicitudes</h1>
 <table class="table">
     <thead>
         <tr>
@@ -69,5 +63,13 @@
         {% endfor %}
     </tbody>
 </table>
+
+<h2>Enviar una Solicitud</h2>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Solicitar</button>
+</form>
 
 {% endblock %}

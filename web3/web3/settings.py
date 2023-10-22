@@ -118,11 +118,17 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Define la URL a la que se redirige al usuario después de iniciar sesión con éxito.
+# En este caso, se redirige al usuario a la página "home".
 LOGIN_REDIRECT_URL = 'home'
 
-# settings.py
-
+# Define la URL base para los archivos multimedia (por ejemplo, imágenes subidas por el usuario).
 MEDIA_URL = '/media/'
+
+# Define la ruta en el sistema de archivos donde se almacenarán los archivos multimedia.
+# En este caso, los archivos se guardarán en una carpeta llamada "media" en el directorio base del proyecto.
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
+# Define el módulo (y modelo) que se utilizará para los perfiles de usuario.
+# En este caso, se indica que el modelo 'Profile' en la aplicación 'employees' será el modelo de perfil.
 AUTH_PROFILE_MODULE = 'employees.Profile'

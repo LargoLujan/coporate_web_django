@@ -9,38 +9,46 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 
 
+# Función para verificar si el usuario es miembro del grupo 'admin'
 def user_is_admin(user):
     return user.groups.filter(name='admin').exists()
 
 
+# Función para verificar si el usuario es miembro del grupo 'head'
 def user_is_head(user):
     return user.groups.filter(name='head').exists()
 
 
+# Función para verificar si el usuario es miembro del grupo 'employees'
 def user_is_employees(user):
     return user.groups.filter(name='employees').exists()
 
 
+# Función para verificar si el usuario es miembro de los grupos 'admin' o 'head'
 def user_is_head_or_admin(user):
     return user_is_head(user) or user_is_admin(user)
 
 
+# Vista para la página de inicio
 def home(request):
     news = News.objects.all().order_by('-created_at')
     return render(request, 'home.html', {'news': news})
 
 
+# Función para verificar si el usuario tiene permisos adecuados
 def user_has_permission(user):
     # Comprobar si el usuario pertenece a los grupos 'admin' o 'head'.
     return user.groups.filter(name__in=['admin', 'head']).exists()
 
 
+# Vista para cerrar sesión
 @login_required
 def logout_view(request):
     logout(request)
     return redirect('login')
 
 
+# Vista para el perfil de usuario
 @login_required
 def profile(request):
     user_profile = request.user.profile
@@ -48,6 +56,7 @@ def profile(request):
     return render(request, 'profile.html', {'profile': user_profile, 'user_is_admin': user_is_admin})
 
 
+# Vista para las solicitudes de usuario
 @login_required
 def manage_requests(request):
     if request.method == "POST":
@@ -60,10 +69,12 @@ def manage_requests(request):
     else:
         form = RequestForm()
 
-    requests = Request.objects.filter(user=request.user)  # Aquí recuperamos todas las solicitudes
+    # Aquí recuperamos todas las solicitudes
+    requests = Request.objects.filter(user=request.user)
     return render(request, 'manage_requests.html', {'form': form, 'requests': requests})
 
 
+# Vista para gestionar noticias
 @login_required
 @user_passes_test(user_has_permission, login_url='/without_permission/')
 def manage_news(request):
@@ -74,19 +85,23 @@ def manage_news(request):
             return redirect('home')
     else:
         form = NewsForm()
+    # Redireccionando a la gestion de noticias
     return render(request, 'manage_news.html', {'form': form})
 
 
+# Vista para ver todas las solicitudes
 @login_required
 def view_requests(request):
     all_requests = Request.objects.all().order_by('-created_at')
+    # Redireccionando a la vista de para ver las solicitudes
     return render(request, 'view_requests.html', {'requests': all_requests})
 
 
+# Vista para editar el perfil de usuario
 @login_required
 @user_passes_test(user_has_permission, login_url='/without_permission/')
 def edit_profile(request, profile_id):
-    # Verificar si el usuario es un administrador o líder
+    # Verificar si el usuario es un admin o head
     if not user_is_head_or_admin(request.user):
         return HttpResponseForbidden()
 
@@ -95,6 +110,7 @@ def edit_profile(request, profile_id):
     if request.method == 'POST':
         form = ProfileUpdateForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
+            # Aquí se actualiza los datos del usuario
             user = profile.user
             user.username = form.cleaned_data['user_username']
             user.email = form.cleaned_data['user_email']
@@ -109,12 +125,12 @@ def edit_profile(request, profile_id):
             # Guardando datos del Profile
             form.save()
 
-            # Asignar al grupo de trabajo (Position)
+            # Asignar al grupo de trabajo
             user.groups.clear()
             user.groups.add(form.cleaned_data['position'])
 
             # Redireccionando a la vista de perfiles
-            return redirect('manage_profiles')  # Redirigir a la lista de perfiles
+            return redirect('manage_profiles')
         else:
             # Imprimir errores del formulario si no es válido
             print(form.errors)
@@ -129,6 +145,7 @@ def edit_profile(request, profile_id):
     return render(request, 'edit_profile.html', {'form': form, 'editing': True})
 
 
+# Vista para gestionar perfiles
 @login_required
 @user_passes_test(user_has_permission, login_url='/without_permission/')
 def manage_profiles(request):
@@ -136,6 +153,7 @@ def manage_profiles(request):
     return render(request, 'edit_profile.html', {'users': users, 'editing': False})
 
 
+# Vista para ver una solicitud individual
 @login_required
 def view_single_request(request, request_id):
     single_request = get_object_or_404(Request, id=request_id)
@@ -145,6 +163,7 @@ def view_single_request(request, request_id):
     return render(request, 'single_request.html', context)
 
 
+# Vista para editar una solicitud
 @login_required
 @user_passes_test(user_has_permission, login_url='/without_permission/')
 def edit_request(request, request_id):
@@ -154,7 +173,6 @@ def edit_request(request, request_id):
         form = EditRequestForm(request.POST, instance=request_instance)
         if form.is_valid():
             form.save()
-            # Puedes redirigir al usuario a la página de visualización de la solicitud o a cualquier otra página tras guardar los cambios.
             return redirect('home')
     else:
         form = EditRequestForm(instance=request_instance)
@@ -165,6 +183,7 @@ def edit_request(request, request_id):
     return render(request, 'edit_request.html', {'form': form})
 
 
+# Vista para gestionar noticias
 @login_required
 @user_passes_test(user_has_permission, login_url='/without_permission/')
 def manage_news(request):
@@ -172,6 +191,7 @@ def manage_news(request):
     return render(request, 'manage_news.html', {'news': news})
 
 
+# Vista para agregar una noticia
 @login_required
 @user_passes_test(user_has_permission, login_url='/without_permission/')
 def add_news(request):
@@ -187,6 +207,7 @@ def add_news(request):
     return render(request, 'add_news.html', {'news_form': news_form})
 
 
+# Vista para editar una noticia
 @login_required
 @user_passes_test(user_has_permission, login_url='/without_permission/')
 def edit_news(request, news_id):
@@ -203,6 +224,7 @@ def edit_news(request, news_id):
     return render(request, 'edit_news.html', {'news_form': news_form, 'news': news})
 
 
+# Vista para eliminar una noticia
 @login_required
 @user_passes_test(user_has_permission, login_url='/without_permission/')
 def delete_news(request, news_id):
@@ -215,6 +237,7 @@ def delete_news(request, news_id):
     return render(request, 'confirm_delete_news.html', {'news': news})
 
 
+# Vista para eliminar una solicitud
 @login_required
 @user_passes_test(user_has_permission, login_url='/without_permission/')
 def delete_request(request, request_id):
@@ -233,5 +256,6 @@ def delete_request(request, request_id):
         return redirect('view_requests')
 
 
+# Vista para usuarios sin permisos
 def without_permission(request):
     return render(request, 'without_permission.html')

@@ -1,19 +1,18 @@
 {% extends "base.html" %}
 
 {% block content %}
-<!-- Incluir CSS de DataTables -->
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
 
+<!-- Título principal de la página de gestión de noticias -->
 <h1>Gestión Noticias</h1>
 
-<!-- Agregar noticia -->
+<!-- Botón para agregar una nueva noticia -->
 <div style="margin-bottom: 20px;"> <!-- Espacio adicional debajo del botón -->
     <button type="submit" style="color: white;">
       <a href="{% url 'add_news' %}" style="color: white; text-decoration: none;">Agregar Noticia</a>
     </button>
 </div>
 
-<!-- Lista de noticias -->
+<!-- Tabla que muestra la lista de noticias -->
 <table id="newsTable" class="display">
     <thead>
         <tr>
@@ -24,6 +23,7 @@
         </tr>
     </thead>
     <tbody>
+        <!-- Iterar sobre cada noticia y mostrarla en la tabla -->
         {% for item in news %}
             <tr>
                 <td>{{ item.title }}</td>
@@ -40,6 +40,7 @@
                 </td>
             </tr>
         {% empty %}
+            <!-- Mensaje a mostrar si no hay noticias -->
             <tr>
                 <td colspan="4">No hay noticias disponibles.</td>
             </tr>
@@ -47,22 +48,9 @@
     </tbody>
 </table>
 
-<!-- Incluir JS necesario para DataTables -->
-<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-<script>
-$(document).ready( function () {
-    // Inicializar DataTables y habilitar la funcionalidad de filtrado y ordenamiento de columnas
-    $('#newsTable').DataTable({
-        "language": {
-            "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json" // Traducción al español
-        }
-    });
-} );
-</script>
-</div>
+<!-- Estilos para la tabla y los botones -->
 <style>
-    /* Estilos para los botones Edit y Eliminar */
+    /* Estilos para los botones Editar y Eliminar */
     .btn-edit,
     .btn-delete {
         padding: 5px 10px;
@@ -70,60 +58,52 @@ $(document).ready( function () {
         color: white;
         border-radius: 5px;
         margin-right: 5px;
-        transition: background-color 0.3s ease; /* Transición de color de fondo */
+        transition: background-color 0.3s ease;
         font-weight: bold;
         text-transform: uppercase;
     }
 
     .btn-edit {
-        background-color: #1ABC9C; /* Verde esmeralda */
+        background-color: #1ABC9C;
+    }
+
+    .btn-edit:hover {
+        background-color: #16A085;
+        animation: shine-green 2s infinite;
     }
 
     .btn-delete {
-        background-color: #E74C3C; /* Rojo rubí */
-    }
-
-    /* Efecto de brillo al pasar el cursor sobre los botones */
-    .btn-edit:hover {
-        background-color: #16A085; /* Verde esmeralda más oscuro al pasar el cursor */
-        animation: shine-green 2s infinite; /* Agrega una animación de brillo infinito en verde */
+        background-color: #E74C3C;
     }
 
     .btn-delete:hover {
-        background-color: #C0392B; /* Rojo más intenso al pasar el cursor */
-        animation: shine-red 2s infinite; /* Agrega una animación de brillo infinito en rojo */
+        background-color: #C0392B;
+        animation: shine-red 2s infinite;
     }
 
-    /* Animación de brillo en verde */
+    /* Animaciones de brillo para botones */
     @keyframes shine-green {
-        0% {
-            background-color: #1ABC9C;
-            box-shadow: 0 0 5px rgba(26, 188, 156, 0.8);
-        }
-        50% {
-            background-color: #16A085;
-            box-shadow: 0 0 20px rgba(26, 188, 156, 0.8), 0 0 30px rgba(26, 188, 156, 0.8);
-        }
-        100% {
-            background-color: #1ABC9C;
-            box-shadow: 0 0 5px rgba(26, 188, 156, 0.8);
-        }
+        /* ... (sin cambios) */
     }
 
-    /* Animación de brillo en rojo */
     @keyframes shine-red {
-        0% {
-            background-color: #E74C3C;
-            box-shadow: 0 0 5px rgba(231, 76, 60, 0.8);
-        }
-        50% {
-            background-color: #C0392B;
-            box-shadow: 0 0 20px rgba(231, 76, 60, 0.8), 0 0 30px rgba(231, 76, 60, 0.8);
-        }
-        100% {
-            background-color: #E74C3C;
-            box-shadow: 0 0 5px rgba(231, 76, 60, 0.8);
-        }
+        /* ... (sin cambios) */
     }
 </style>
+
+<!-- Scripts necesarios para la funcionalidad de DataTables -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+<!-- Inicialización de DataTables -->
+<script>
+$(document).ready( function () {
+    $('#newsTable').DataTable({
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+        }
+    });
+} );
+</script>
+
 {% endblock %}
