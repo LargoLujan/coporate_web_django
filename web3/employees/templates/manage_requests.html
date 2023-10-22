@@ -1,25 +1,55 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Submit a Request</h1>
+<style>
+    /* Estilos personalizados para la página de inicio */
+    .news-article {
+        background-color: #f5f5f5; /* Fondo gris claro */
+        border: 1px solid #ddd; /* Borde gris */
+        padding: 20px;
+        margin-bottom: 20px;
+        border-radius: 5px; /* Bordes redondeados */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    }
+
+    .news-article h2 {
+        color: #333; /* Texto negro */
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+
+    .news-article p {
+        color: #666; /* Texto gris */
+        font-size: 16px;
+    }
+
+    .news-article img {
+        max-width: 100%;
+        height: auto;
+        margin-top: 10px;
+        border: 1px solid #ccc; /* Borde gris para las imágenes */
+        border-radius: 5px; /* Bordes redondeados para las imágenes */
+    }
+</style>
+<h1>Enviar una Solicitud</h1>
 
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" class="btn btn-primary">Solicitar</button>
 </form>
 
 <!-- Lista de solicitudes -->
-<h2>List of Requests</h2>
+<h2>Lista de Solicitudes</h2>
 <table class="table">
     <thead>
         <tr>
-            <th>Date</th>
-            <th>User</th>
-            <th>Subject</th>
-            <th>Description</th>
-            <th>Status</th>
-            <th>Action</th> <!-- Columna adicional para el botón "Ver" -->
+            <th>Fecha de creación</th>
+            <th>Usuario</th>
+            <th>Asunto</th>
+            <th>Descripción</th>
+            <th>Estado</th>
+            <th>Acción</th> <!-- Columna adicional para el botón "Ver" -->
         </tr>
     </thead>
     <tbody>
@@ -34,7 +64,7 @@
         </tr>
         {% empty %}
         <tr>
-            <td colspan="6">No requests found.</td> <!-- Ajustado el "colspan" a 6 debido a la nueva columna -->
+            <td colspan="6">No se encuentran solicitudes.</td> <!-- Ajustado el "colspan" a 6 debido a la nueva columna -->
         </tr>
         {% endfor %}
     </tbody>

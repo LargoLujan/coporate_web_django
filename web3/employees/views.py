@@ -30,6 +30,11 @@ def home(request):
     return render(request, 'home.html', {'news': news})
 
 
+def user_has_permission(user):
+    # Comprobar si el usuario pertenece a los grupos 'admin' o 'head'.
+    return user.groups.filter(name__in=['admin', 'head']).exists()
+
+
 @login_required
 def logout_view(request):
     logout(request)
@@ -41,15 +46,6 @@ def profile(request):
     user_profile = request.user.profile
     user_is_admin = request.user.profile.position == 'admin'  # Cambia esto según cómo determinas que un usuario es admin en tu modelo
     return render(request, 'profile.html', {'profile': user_profile, 'user_is_admin': user_is_admin})
-
-
-@login_required
-def calendar(request, user_id=None):
-    if user_id:
-        events = Event.objects.filter(user_id=user_id)
-    else:
-        events = Event.objects.filter(user=request.user)
-    return render(request, 'calendar.html', {'events': events})
 
 
 @login_required
@@ -69,7 +65,7 @@ def manage_requests(request):
 
 
 @login_required
-@user_passes_test(user_is_head_or_admin)
+@user_passes_test(user_has_permission, login_url='/without_permission/')
 def manage_news(request):
     if request.method == "POST":
         form = NewsForm(request.POST)
@@ -88,7 +84,7 @@ def view_requests(request):
 
 
 @login_required
-@user_passes_test(user_is_head_or_admin)
+@user_passes_test(user_has_permission, login_url='/without_permission/')
 def edit_profile(request, profile_id):
     # Verificar si el usuario es un administrador o líder
     if not user_is_head_or_admin(request.user):
@@ -134,7 +130,7 @@ def edit_profile(request, profile_id):
 
 
 @login_required
-@user_passes_test(user_is_head_or_admin)
+@user_passes_test(user_has_permission, login_url='/without_permission/')
 def manage_profiles(request):
     users = User.objects.all()
     return render(request, 'edit_profile.html', {'users': users, 'editing': False})
@@ -150,7 +146,7 @@ def view_single_request(request, request_id):
 
 
 @login_required
-@user_passes_test(user_is_head_or_admin)
+@user_passes_test(user_has_permission, login_url='/without_permission/')
 def edit_request(request, request_id):
     request_instance = get_object_or_404(Request, id=request_id)
 
@@ -168,13 +164,16 @@ def edit_request(request, request_id):
     }
     return render(request, 'edit_request.html', {'form': form})
 
+
 @login_required
-@user_passes_test(user_is_admin)
+@user_passes_test(user_has_permission, login_url='/without_permission/')
 def manage_news(request):
     news = News.objects.all()
     return render(request, 'manage_news.html', {'news': news})
 
 
+@login_required
+@user_passes_test(user_has_permission, login_url='/without_permission/')
 def add_news(request):
     if request.method == "POST":
         news_form = NewsForm(request.POST, request.FILES)
@@ -189,6 +188,7 @@ def add_news(request):
 
 
 @login_required
+@user_passes_test(user_has_permission, login_url='/without_permission/')
 def edit_news(request, news_id):
     news = News.objects.get(pk=news_id)
 
@@ -204,6 +204,7 @@ def edit_news(request, news_id):
 
 
 @login_required
+@user_passes_test(user_has_permission, login_url='/without_permission/')
 def delete_news(request, news_id):
     news = News.objects.get(pk=news_id)
 
@@ -213,7 +214,9 @@ def delete_news(request, news_id):
 
     return render(request, 'confirm_delete_news.html', {'news': news})
 
+
 @login_required
+@user_passes_test(user_has_permission, login_url='/without_permission/')
 def delete_request(request, request_id):
     request_to_delete = get_object_or_404(Request, id=request_id)
 
@@ -228,3 +231,7 @@ def delete_request(request, request_id):
     else:
         messages.error(request, "No tienes permiso para eliminar esta solicitud.")
         return redirect('view_requests')
+
+
+def without_permission(request):
+    return render(request, 'without_permission.html')

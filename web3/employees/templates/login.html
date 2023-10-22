@@ -1,10 +1,82 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Login</button>
-</form>
-{% endblock %}
+<style>
+    /* Estilos personalizados para la página de visualización de perfil */
+    .profile-form {
+        background-color: #f5f5f5; /* Fondo gris claro */
+        border: 1px solid #ddd; /* Borde gris */
+        padding: 20px;
+        margin: 0 auto; /* Centra el formulario horizontalmente en la página */
+        max-width: 400px; /* Limita el ancho máximo del formulario */
+        border-radius: 5px; /* Bordes redondeados */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    }
 
+    .profile-form form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .profile-form label {
+        color: #333; /* Texto negro */
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    .profile-form input[type="text"],
+    .profile-form input[type="email"],
+    .profile-form input[type="password"] {
+        padding: 10px;
+        border: 1px solid #ccc; /* Borde gris para los campos de entrada */
+        border-radius: 5px; /* Bordes redondeados para los campos de entrada */
+        margin-bottom: 10px;
+        width: 100%; /* Establece el ancho al 100% para llenar el contenedor */
+        box-sizing: border-box; /* Incluye el padding y el borde en el ancho total */
+    }
+
+    .profile-form button[type="submit"] {
+        background-color: #1ABC9C; /* Verde esmeralda */
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px; /* Bordes redondeados para el botón */
+        cursor: pointer;
+        font-size: 18px;
+        margin-top: 10px; /* Espacio superior para el botón */
+        transition: background-color 0.3s ease; /* Transición de color de fondo */
+    }
+
+    .profile-form button[type="submit"]:hover {
+        background-color: #16A085; /* Verde esmeralda más oscuro al pasar el cursor */
+        animation: shine 2s infinite; /* Agrega una animación de brillo infinito */
+    }
+
+    /* Animación de brillo */
+    @keyframes shine {
+        0% {
+            background-color: #1ABC9C;
+            box-shadow: 0 0 5px rgba(26, 188, 156, 0.8);
+        }
+        50% {
+            background-color: #16A085;
+            box-shadow: 0 0 20px rgba(26, 188, 156, 0.8), 0 0 30px rgba(26, 188, 156, 0.8);
+        }
+        100% {
+            background-color: #1ABC9C;
+            box-shadow: 0 0 5px rgba(26, 188, 156, 0.8);
+        }
+    }
+</style>
+
+<div class="profile-form">
+    <form method="post">
+        {% csrf_token %}
+        <label for="{{ form.username.id_for_label }}">Nombre de usuario:</label>
+        {{ form.username }}
+        <label for="{{ form.password.id_for_label }}">Contraseña:</label>
+        {{ form.password }}
+        <button type="submit">Acceder</button>
+    </form>
+</div>
+{% endblock %}

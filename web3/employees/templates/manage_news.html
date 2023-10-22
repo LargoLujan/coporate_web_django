@@ -1,50 +1,129 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Manage News</h1>
+<!-- Incluir CSS de DataTables -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+
+<h1>Gestión Noticias</h1>
 
 <!-- Agregar noticia -->
-<a href="{% url 'add_news' %}">Agregar Noticia</a>
-
-<!-- Filtrar noticias -->
-<form method="get">
-  <label for="search">Buscar Noticia:</label>
-  <input type="text" id="search" name="search" value="{{ request.GET.search }}">
-  <button type="submit">Buscar</button>
-</form>
+<div style="margin-bottom: 20px;"> <!-- Espacio adicional debajo del botón -->
+    <button type="submit" style="color: white;">
+      <a href="{% url 'add_news' %}" style="color: white; text-decoration: none;">Agregar Noticia</a>
+    </button>
+</div>
 
 <!-- Lista de noticias -->
-<table>
-  <thead>
-    <tr>
-      <th>Título</th>
-      <th>Texto</th>
-      <th>Imagen</th>
-      <th>Acciones</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for item in news %}
-      <tr>
-        <td>{{ item.title }}</td>
-        <td>{{ item.content }}</td>
-        <td>
-          {% if item.image %}
-            <img src="{{ item.image.url }}" alt="{{ item.title }}" height="100">
-          {% else %}
-            No hay imagen
-          {% endif %}
-        </td>
-        <td>
-          <a href="{% url 'edit_news' item.id %}">Editar</a> |
-          <a href="{% url 'delete_news' item.id %}">Eliminar</a>
-        </td>
-      </tr>
-    {% empty %}
-      <tr>
-        <td colspan="4">No hay noticias disponibles.</td>
-      </tr>
-    {% endfor %}
-  </tbody>
+<table id="newsTable" class="display">
+    <thead>
+        <tr>
+            <th>Título</th>
+            <th>Texto</th>
+            <th>Imagen</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in news %}
+            <tr>
+                <td>{{ item.title }}</td>
+                <td>{{ item.content }}</td>
+                <td>
+                    {% if item.image %}
+                        <img src="{{ item.image.url }}" alt="{{ item.title }}" height="100">
+                    {% else %}
+                        No hay imagen
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{% url 'edit_news' item.id %}" class="btn-edit">Editar</a><a href="{% url 'delete_news' item.id %}" class="btn-delete">Eliminar</a>
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="4">No hay noticias disponibles.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
 </table>
+
+<!-- Incluir JS necesario para DataTables -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script>
+$(document).ready( function () {
+    // Inicializar DataTables y habilitar la funcionalidad de filtrado y ordenamiento de columnas
+    $('#newsTable').DataTable({
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json" // Traducción al español
+        }
+    });
+} );
+</script>
+</div>
+<style>
+    /* Estilos para los botones Edit y Eliminar */
+    .btn-edit,
+    .btn-delete {
+        padding: 5px 10px;
+        text-decoration: none;
+        color: white;
+        border-radius: 5px;
+        margin-right: 5px;
+        transition: background-color 0.3s ease; /* Transición de color de fondo */
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .btn-edit {
+        background-color: #1ABC9C; /* Verde esmeralda */
+    }
+
+    .btn-delete {
+        background-color: #E74C3C; /* Rojo rubí */
+    }
+
+    /* Efecto de brillo al pasar el cursor sobre los botones */
+    .btn-edit:hover {
+        background-color: #16A085; /* Verde esmeralda más oscuro al pasar el cursor */
+        animation: shine-green 2s infinite; /* Agrega una animación de brillo infinito en verde */
+    }
+
+    .btn-delete:hover {
+        background-color: #C0392B; /* Rojo más intenso al pasar el cursor */
+        animation: shine-red 2s infinite; /* Agrega una animación de brillo infinito en rojo */
+    }
+
+    /* Animación de brillo en verde */
+    @keyframes shine-green {
+        0% {
+            background-color: #1ABC9C;
+            box-shadow: 0 0 5px rgba(26, 188, 156, 0.8);
+        }
+        50% {
+            background-color: #16A085;
+            box-shadow: 0 0 20px rgba(26, 188, 156, 0.8), 0 0 30px rgba(26, 188, 156, 0.8);
+        }
+        100% {
+            background-color: #1ABC9C;
+            box-shadow: 0 0 5px rgba(26, 188, 156, 0.8);
+        }
+    }
+
+    /* Animación de brillo en rojo */
+    @keyframes shine-red {
+        0% {
+            background-color: #E74C3C;
+            box-shadow: 0 0 5px rgba(231, 76, 60, 0.8);
+        }
+        50% {
+            background-color: #C0392B;
+            box-shadow: 0 0 20px rgba(231, 76, 60, 0.8), 0 0 30px rgba(231, 76, 60, 0.8);
+        }
+        100% {
+            background-color: #E74C3C;
+            box-shadow: 0 0 5px rgba(231, 76, 60, 0.8);
+        }
+    }
+</style>
 {% endblock %}

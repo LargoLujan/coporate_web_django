@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    /* Estilos personalizados para la página de inicio */
+    .news-article {
+        background-color: #f5f5f5; /* Fondo gris claro */
+        border: 1px solid #ddd; /* Borde gris */
+        padding: 20px;
+        margin-bottom: 20px;
+        border-radius: 5px; /* Bordes redondeados */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    }
+
+    .news-article h2 {
+        color: #333; /* Texto negro */
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+
+    .news-article p {
+        color: #666; /* Texto gris */
+        font-size: 16px;
+    }
+
+    .news-article img {
+        max-width: 100%;
+        height: auto;
+        margin-top: 10px;
+        border: 1px solid #ccc; /* Borde gris para las imágenes */
+        border-radius: 5px; /* Bordes redondeados para las imágenes */
+    }
+</style>
+<html>
+<head>
+    <title>Sin permisos</title>
+</head>
+<body>
+    <h1>No tienes permisos para acceder a esta página.</h1>
+    <p>Por favor, contacta al administrador para obtener los permisos necesarios.</p>
+</body>
+</html>
+{% endblock %}

@@ -1,27 +1,32 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Edit Request</h1>
+<div style="background-color: #f5f5f5; padding: 20px; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);">
+    <h1 style="font-size: 24px; color: #333; margin-bottom: 20px;">Editar Solicitud</h1>
 
-<!-- Mostrando la información adicional -->
-<p>
-    Nombre completo: {{ form.instance.user.first_name }} {{ form.instance.user.last_name }}<br>
-    Fecha de creación: {{ form.instance.created_at }}<br>
-    Asunto: {{ form.instance.subject }}
-</p>
+    <!-- Mostrando la información adicional -->
+    <p style="font-size: 18px; color: #555;">
+        Nombre completo: {{ user.first_name }} {{ user.last_name }}<br>
+        Fecha de creación: {{ form.instance.created_at }}<br>
+        Asunto: {{ form.instance.request_type }}
+    </p>
 
-<!-- Formulario para editar la solicitud -->
-<form method="post">
-    {% csrf_token %}
-    <!-- Mostrar solo los campos de descripción y estado para edición -->
-    <label>{{ form.description.label }}</label>
-    {{ form.description }}<br>
-    <label>{{ form.status.label }}</label>
-    {{ form.status }}<br>
-    {% if form.instance.document %}
-        <a href="{{ form.instance.document.url }}" target="_blank">Ver Documento Adjunto</a><br>
-    {% endif %}
-    <button type="submit" class="btn btn-primary">Update</button>
-</form>
-
+    <!-- Formulario para editar la solicitud -->
+    <form method="post">
+        {% csrf_token %}
+        <!-- Mostrar solo los campos de descripción y estado para edición -->
+        <div style="margin-bottom: 10px;">
+            <label style="font-size: 16px; color: #333;">{{ form.description.label }}</label>
+            {{ form.description }}
+        </div>
+        <div style="margin-bottom: 10px;">
+            <label style="font-size: 16px; color: #333;">{{ form.status.label }}</label>
+            {{ form.status }}
+        </div>
+        {% if form.instance.document %}
+            <a href="{{ form.instance.document.url }}" target="_blank" style="font-size: 16px; color: #007bff; text-decoration: none; margin-bottom: 20px; display: block;">Ver Documento Adjunto</a>
+        {% endif %}
+        <button type="submit" class="btn btn-primary" style="background-color: #4caf50; color: #fff; border: none; padding: 10px 20px; font-size: 16px; border-radius: 5px; cursor: pointer; transition: background-color 0.3s;">Actualizar</button>
+    </form>
+</div>
 {% endblock %}

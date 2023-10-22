@@ -1,40 +1,43 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Submit a Request</h1>
+<h1>Lista de Solicitudes</h1>
 
 <!-- Incluir CSS de DataTables -->
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
-
-<h2>List of Requests</h2>
 {% if requests %}
     <!-- Añadir un ID a la tabla -->
     <table class="table" id="requestsTable">
         <thead>
             <tr>
-                <th>Date</th>
-                <th>User</th>
-                <th>Subject</th>
-                <th>Status</th>
-                <th>Action</th>
+                <th>Fecha solicitud</th>
+                <th>Nombre</th>
+                <th>Apellidos</th>
+                <th>Usuario</th>
+                <th>Asunto</th>
+                <th>Estado</th>
+                <th>Acción</th>
             </tr>
         </thead>
         <tbody>
             {% for request_item in requests %}
                 <tr>
                     <td>{{ request_item.created_at }}</td>
+                    <td>{{ user.first_name }}</td>
+                    <td>{{ user.last_name }}</td>
                     <td>{{ request_item.user.username }}</td>
                     <td>{{ request_item.request_type }}</td>
                     <td>{{ request_item.status }}</td>
-                    <td><a href="{% url 'edit_request' request_item.id %}">Edit</a>
-                        <a href="{% url 'delete_request' request_item.id %}">Eliminar</a>
+                    <td>
+                        <a href="{% url 'edit_request' request_item.id %}" class="btn-edit">Editar</a>
+                        <a href="{% url 'delete_request' request_item.id %}" class="btn-delete">Eliminar</a>
                     </td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
 {% else %}
-    <p>No requests have been submitted yet.</p>
+    <p>Todavía no se ha presentado ninguna solicitud.</p>
 {% endif %}
 
 <!-- Incluir JS necesario para DataTables -->
@@ -42,9 +45,79 @@
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
 <script>
 $(document).ready( function () {
-    // Inicializar DataTables para la tabla de solicitudes
-    $('#requestsTable').DataTable();
+    // Inicializar DataTables y habilitar la funcionalidad de filtrado y ordenamiento de columnas
+    $('#requestsTable').DataTable({
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json" // Traducción al español
+        }
+    });
 } );
 </script>
+
+<style>
+    /* Estilos para los botones Edit y Eliminar */
+    .btn-edit,
+    .btn-delete {
+        padding: 5px 10px;
+        text-decoration: none;
+        color: white;
+        border-radius: 5px;
+        margin-right: 5px;
+        transition: background-color 0.3s ease; /* Transición de color de fondo */
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .btn-edit {
+        background-color: #1ABC9C; /* Verde esmeralda */
+    }
+
+    .btn-delete {
+        background-color: #E74C3C; /* Rojo rubí */
+    }
+
+    /* Efecto de brillo al pasar el cursor sobre los botones */
+    .btn-edit:hover {
+        background-color: #16A085; /* Verde esmeralda más oscuro al pasar el cursor */
+        animation: shine-green 2s infinite; /* Agrega una animación de brillo infinito en verde */
+    }
+
+    .btn-delete:hover {
+        background-color: #C0392B; /* Rojo más intenso al pasar el cursor */
+        animation: shine-red 2s infinite; /* Agrega una animación de brillo infinito en rojo */
+    }
+
+    /* Animación de brillo en verde */
+    @keyframes shine-green {
+        0% {
+            background-color: #1ABC9C;
+            box-shadow: 0 0 5px rgba(26, 188, 156, 0.8);
+        }
+        50% {
+            background-color: #16A085;
+            box-shadow: 0 0 20px rgba(26, 188, 156, 0.8), 0 0 30px rgba(26, 188, 156, 0.8);
+        }
+        100% {
+            background-color: #1ABC9C;
+            box-shadow: 0 0 5px rgba(26, 188, 156, 0.8);
+        }
+    }
+
+    /* Animación de brillo en rojo */
+    @keyframes shine-red {
+        0% {
+            background-color: #E74C3C;
+            box-shadow: 0 0 5px rgba(231, 76, 60, 0.8);
+        }
+        50% {
+            background-color: #C0392B;
+            box-shadow: 0 0 20px rgba(231, 76, 60, 0.8), 0 0 30px rgba(231, 76, 60, 0.8);
+        }
+        100% {
+            background-color: #E74C3C;
+            box-shadow: 0 0 5px rgba(231, 76, 60, 0.8);
+        }
+    }
+</style>
 
 {% endblock %}
